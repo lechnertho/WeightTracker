@@ -2,7 +2,14 @@
 <resources>
 
     <string name="app_name">WeightTracker</string>
-    <string name="action_add">Add Today\'s Weight</string>
-    <string name="action_span">Span</string>
+    <string name="action_add">Add Todays Weight</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_weight_dialog">Add Todays Weight(e.g. 71)</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="nothing_to_display">No Values to display</string>
+    <string name="pref_displayMode">Display Mode</string>
+    <string name="pref_cat_general_settings">General Settings</string>
+    <string name="week">week</string>
 
 </resources>

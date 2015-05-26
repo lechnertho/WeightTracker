@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:key="pref_general_settings"
+        android:title="@string/pref_cat_general_settings">
+
+        <ListPreference
+            android:defaultValue="2"
+            android:dialogTitle="@string/pref_displayMode"
+            android:entries="@array/pref_displayMode_entries"
+            android:entryValues="@array/pref_displayMode_values"
+            android:key="pref_displayMode"
+            android:title="@string/pref_displayMode" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

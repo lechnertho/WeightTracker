@@ -1,4 +1,4 @@
-package de.lechner.weighttracker;
+package de.lechner.weighttracker.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Author: Thomas Lechner on 11.02.2015.
  *
  * This Class creates a SQLite Database. The database is called weights.db. The database has one
- * table with 3 rows(_id, weight, date).
+ * table with 6 columns(_id, weight, year, month, day, week).
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
@@ -18,7 +18,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table weights(_id integer primary key autoincrement, weight real not null, year int not null, month int not null, day int not null);");
+            db.execSQL("create table weights(_id integer primary key autoincrement, weight real not null, year int not null, month int not null, day int not null, week int not null);");
         }
 
         @Override

@@ -3,6 +3,8 @@ package de.lechner.weighttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,23 +15,25 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.Calendar;
-import java.util.List;
 
+import de.lechner.weighttracker.model.TrendView;
 
+/**
+ * Author: Thomas Lechner on 24.04.2015.
+ */
 public class MainActivity extends ActionBarActivity {
 
-    private WeightsDataSource datasource;
+    private TrendView bodyWeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        datasource = new WeightsDataSource(this);
-        datasource.open();
-        ((TrendView) findViewById(R.id.trendview_weight)).setDataSource(datasource);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        datasource.createEntry(65, 2015, 3, 15);
+        bodyWeight = (TrendView) findViewById(R.id.trendview_weight);
+
     }
 
 
@@ -52,17 +56,17 @@ public class MainActivity extends ActionBarActivity {
 
         int id = item.getItemId();
 
-        switch(id) {
+        switch (id) {
             case R.id.action_add:
                 AlertDialog.Builder addWeightAlert = new AlertDialog.Builder(MainActivity.this);
-                addWeightAlert.setTitle("Add Today's Weight(e.g. 71)");
+                addWeightAlert.setTitle(R.string.add_weight_dialog);
                 addWeightAlert.setView(view);
-                addWeightAlert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                addWeightAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         try {
                             Float weight = Float.parseFloat(((EditText) view.findViewById(R.id.addweight_edittext)).getText().toString());
-                            datasource.createEntry(weight, Calendar.getInstance().get(Calendar.YEAR), (Calendar.getInstance().get(Calendar.MONTH) + 1), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                            } catch (NumberFormatException e) {
+                            bodyWeight.addWeight(weight, Calendar.getInstance().get(Calendar.YEAR), (Calendar.getInstance().get(Calendar.MONTH) + 1), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));
+                        } catch (NumberFormatException e) {
                             // TODO: inform user about wrong input(input wasnt a float)
                         } finally {
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -70,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
 
-                addWeightAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                addWeightAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
@@ -79,7 +83,8 @@ public class MainActivity extends ActionBarActivity {
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                 return true;
-            case R.id.action_span:
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -88,13 +93,11 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        datasource.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        datasource.close();
         super.onPause();
     }
 }
